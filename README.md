@@ -5,17 +5,17 @@
 
 ## Table of Contents
 - [Microservices VS Monolith](#Microservices-vs-monolith)
-    -  [Microservices](#Microservices)
-
+    -  [Microservices](#microservices)
+    - [Monolith](#monolith)
+- [Vertical VS Horizontal Scaling](#-🔹-Vertical-VS-Horizontal-Scaling)
 - [Relational databases](#-relational-databases)
 
-- [GraphQL Pros & Cons](#graphql-pros-cons)
+- [GraphQL Pros & Cons](#-🔹-GraphQL-Pros-&-Cons)
 
 <br>
 <br>
 
 # 🔹 Microservices VS Monolith
-#Microservices-vs-monolith
 
 ### Microservices
 **Pros**
@@ -265,7 +265,6 @@ If the results doesn't impact a user response, think about using message queues.
 <br>
 
 # 🔹 GraphQL Pros & Cons
-#Graphql-pros-cons
 
 **Pros**
 - No over-fetching
