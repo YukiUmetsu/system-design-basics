@@ -25,6 +25,8 @@
 - [GraphQL VS REST API](#graphql-vs-rest-api)
     - [GraphQL](#graphql)
     - [REST API](#rest-api)
+- [Backend Security](#backend-security)
+- [What is Webhook](#what-is-webhook)
 <br>
 <br>
 
@@ -312,4 +314,142 @@ If the results doesn't impact a user response, think about using message queues.
 - It is hard to get consistency accross all platforms
 - If you have to retrieve any data from two endpoints, you need to send two separate requests to API.
 - Manipulating nested resources is not possible
+
 <br><br>
+
+# Backend Security
+
+- Check the size of the payload
+
+- Type of the payload
+    - NoSQL injection
+
+- Contents
+    -  SQL
+
+- Rate limits
+    - Prepare for DoS (denial-of-service) attack
+
+- Encryption
+    - encrypt secrets
+
+- Expose minimum ports and services
+
+- Disable introspection
+    - GraphQL GraphiQL
+    - Firebase
+
+<br>
+
+### NoSQL injection example
+```
+db.collection.find( { $where: function() { 
+    return (this.name == $userData) } } 
+);
+
+// NoSQL injectiion
+db.collection.find( { $where: function() { 
+    return (this.name == 'a'; sleep(5000) ) } } );
+```
+To prevent this
+- Check type of inputs
+- Sanitize usrer inputs
+- Use the most recent version of the db library
+
+
+<br><br>
+
+# What is Webhook 
+A webhook is an HTTP-based callback function that allows lightweight, event-driven communication between 2 APIs.
+
+Benefits:
+- Eliminate the need for polling.
+- Usually quick to set up.  
+- Automate data transfer
+- Good for lightweight, specific payloads. 
+
+Examples:
+- **MailChimp** uses a webhook to signup users from your website to your newsletter.
+- **Paypal** uses it to tell your accounting app when your clients pay you.
+- **Shopify** offers webhooks to keep parts of your commerce system up-to-date, so you don’t have to enter new transaction details manually.
+
+**Security**:
+- Use HTTPS
+- Don't send secrets through webhook
+- Add timestamps
+    - Replay attacks don’t read or manipulate messages, but they can catch a legitimate, encrypted message and resend it at an good timing for the attacker. 
+- Sign messages
+
+    Bad actors can intercept messages sent on the internet and change their contents to benefit themselves. To prevent unwanted changes, we should sign our messages. We can do this using a hash-based message authentication code (HMAC), which consists of a hashing algorithm and a secret code or key that both parties share.
+
+    HMAC hashes (or scrambles) assign a specific hash function to each message. Allowing a webhook consumer to verify a message’s authenticity and integrity by checking the message against the hash.
+
+<br><br>
+
+# OWASP
+The OWASP Top 10 is a standard awareness document for developers and web application security. It represents a broad consensus about the most critical security risks to web applications.
+
+- Broken Access Control
+    - a scenario in which attackers can access, modify, delete or perform actions outside an application or systems’ intended permissions.
+
+<br>
+
+- Cryptographic Failures
+    
+    Examples
+    
+    Scenario #1: An application encrypts credit card numbers in a database using automatic database encryption. However, this data is automatically decrypted when retrieved, allowing a SQL injection flaw to retrieve credit card numbers in clear text.
+
+    Scenario #2: A site doesn't use or enforce TLS for all pages or supports weak encryption. An attacker monitors network traffic (e.g., at an insecure wireless network), downgrades connections from HTTPS to HTTP, intercepts requests, and steals the user's session cookie. The attacker then replays this cookie and hijacks the user's (authenticated) session, accessing or modifying the user's private data. Instead of the above they could alter all transported data, e.g., the recipient of a money transfer.
+
+    Scenario #3: The password database uses unsalted or simple hashes to store everyone's passwords. 
+
+    Prevention:
+    - Don't use FTP and SMTP for transfering sensitive data
+    - Ensure up-to-date and strong standard algorithms, protocols, and keys are in place
+    - Disable caching for response that contain sensitive data
+
+<br>
+
+- Injection
+    - SQL, NoSQL, ORM injection
+
+    Prevention:
+    - server side input validation
+    - escape special charactors
+
+<br>
+
+- Server-Side Request Forgery
+    
+    SSRF flaws occur whenever a web application is fetching a remote resource without validating the user-supplied URL. It allows an attacker to coerce the application to send a crafted request to an unexpected destination, even when protected by a firewall, VPN, or another type of network access control list (ACL).
+
+    Scenario #1: Port scan internal servers – If the network architecture is unsegmented, attackers can map out internal networks and determine if ports are open or closed on internal servers from connection results or elapsed time to connect or reject SSRF payload connections.
+
+    Scenario #2: Sensitive data exposure – Attackers can access local files or internal services to gain sensitive information such as file:///etc/passwd and http://localhost:28017/.
+
+    Scenario #3: Access metadata storage of cloud services – Most cloud providers have metadata storage such as http://169.254.169.254/. An attacker can read the metadata to gain sensitive information.
+
+<br>
+
+- Cross-Site Scripting - XSS
+
+    inject client-side scripts into web pages viewed by the users.
+
+- Cross-Site Request Forgery - CSRF
+    
+    an attack that forces an end user to execute unwanted actions on a web application in which they’re currently authenticated
+
+    Example
+
+    1. The attacker's page will trigger an HTTP request to the vulnerable web site.
+    2. If the user is logged in to the vulnerable web site, their browser will automatically include their session cookie in the request (assuming SameSite cookies are not being used).
+    3. The vulnerable web site will process the request in the normal way, treat it as having been made by the victim user, and change their email address.
+
+
+    Prevention
+     - CSRF tokens 
+     - Multi-Step Transactions
+     - User Interaction Based CSRF Defense (one time token, captcha)
+     - Use of Custom Request Headers
+     - Verifying Origin With Standard Headers
