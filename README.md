@@ -4,18 +4,31 @@
 <br>
 
 ## Table of Contents
-- [Microservices VS Monolith](#Microservices-vs-monolith)
+- [Microservices VS Monolith](#microservices-vs-monolith)
     -  [Microservices](#microservices)
     - [Monolith](#monolith)
-- [Vertical VS Horizontal Scaling](#-🔹-Vertical-VS-Horizontal-Scaling)
-- [Relational databases](#-relational-databases)
+- [Vertical VS Horizontal Scaling](#vertical-vs-horizontal-scaling)
+    - [Vertical scaling](#vertical-scaling)
+    - [Horizontal scaling](#horizontal-scaling)
 
-- [GraphQL Pros & Cons](#-🔹-GraphQL-Pros-&-Cons)
-
+- [CAP Theorum](#cap-theorum)
+- [Database Scaling](#database-scaling)
+    - [ACID](#acid)
+    - [Cashing Layer](#cashing-layer)
+    - [Partitions](#partitions)
+    - [Database sharding](#database-sharding)
+- [Relational VS Non-Relational Databases](#relational-vs-non-relational-databases)
+    - [Relational databases](#relational-databases)
+    - [Non-Relationan databases](#non-relationan-databases)
+- [OSI Model](#osi-model)
+- [Message Queues](#message-queues)
+- [GraphQL VS REST API](#graphql-vs-rest-api)
+    - [GraphQL](#graphql)
+    - [REST API](#rest-api)
 <br>
 <br>
 
-# 🔹 Microservices VS Monolith
+# Microservices VS Monolith
 
 ### Microservices
 **Pros**
@@ -48,7 +61,7 @@
 
 <br><br>
 
-# 🔹 Vertical VS Horizontal Scaling 
+# Vertical VS Horizontal Scaling 
 
 ### Vertical scaling
 
@@ -65,7 +78,7 @@
 
 <br>
 
-### Horizontal scaling (with load balancer)
+### Horizontal scaling
 
 **Pros**
 - Scaling up/down faster
@@ -79,7 +92,7 @@
 
 <br><br>
 
-# 🔹 CAP Theorum
+# CAP Theorum
 
 - **Consistency** - Every read receives the most recent write or an error
 - **Availability** - Every request receives a response, without guarantee that it contains the most recent version of the information
@@ -99,7 +112,7 @@ AP is a good choice if the business needs to allow for eventual consistency or w
 
 <br><br>
 
-# 🔹 Database Scaling
+# Database Scaling
 
 ## ACID
 
@@ -151,7 +164,7 @@ For example, employee table (employee id, first name, last name, employee pictur
 
 <br><br>
 
-# 🔹 Relational VS Non-Relational Databases
+# Relational VS Non-Relational Databases
 ### Relational databases
 
 **Pros**
@@ -180,7 +193,7 @@ For example, employee table (employee id, first name, last name, employee pictur
 
 <br><br>
 
-# 🔹 OSI Model
+#  OSI Model
 1. Physical Layer
     - Radio, electric, or light is received and converted to digital bits
 
@@ -229,7 +242,7 @@ For example, employee table (employee id, first name, last name, employee pictur
 <br>
 <br>
 
-# 🔹 Message Queues
+# Message Queues
 It act as data buffers. 
 
 Many at the same time => Process one at a time
@@ -264,8 +277,9 @@ If the results doesn't impact a user response, think about using message queues.
 
 <br>
 
-# 🔹 GraphQL Pros & Cons
+# GraphQL VS REST API
 
+### GraphQL
 **Pros**
 - No over-fetching
 - Validation & type checking
@@ -281,4 +295,21 @@ If the results doesn't impact a user response, think about using message queues.
 - Can’t do File uploading. => It requires a different api for it.
 - Learning curve
 
+<br>
+
+### REST API
+**Pros**
+- Standard, no need to learn new things
+- Uses caching automatically
+- API can be served from more than one server.
+- Can deal with files
+- Response can usually be in JSON, XML, YAML formats
+
+**Cons**
+- Requires versioning if you remove a field
+- There is no way to get limited fields.
+- Doesn't offer type safety or auto-generated documentation
+- It is hard to get consistency accross all platforms
+- If you have to retrieve any data from two endpoints, you need to send two separate requests to API.
+- Manipulating nested resources is not possible
 <br><br>
