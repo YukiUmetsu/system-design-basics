@@ -17,12 +17,13 @@
     - [Cashing Layer](#cashing-layer)
     - [Partitions](#partitions)
     - [Database sharding](#database-sharding)
+
 - [Relational VS Non-Relational Databases](#relational-vs-non-relational-databases)
     - [Relational databases](#relational-databases)
     - [Non-Relationan databases](#non-relationan-databases)
 - [OSI Model](#osi-model)
 - [Message Queues](#message-queues)
-- [GraphQL VS REST API](#graphql-vs-rest-api)
+- [GraphQL vs REST API vs gRPC](#graphql-vs-rest-api-vs-grpc)
     - [GraphQL](#graphql)
     - [REST API](#rest-api)
 - [Backend Security](#backend-security)
@@ -167,6 +168,18 @@ For example, employee table (employee id, first name, last name, employee pictur
 
 <br><br>
 
+# Rate limiting
+- limits the number of requests received by the API within any given second
+- A concurrency limiter that limits the number of requests that are active at any given time
+    - avoid resource-intensive, long-lived requests
+
+<br><br>
+
+# Compress/Optimize Files, Images
+- compress JSON with gzip
+- compress images before sending
+<br><br>
+
 # Relational VS Non-Relational Databases
 ### Relational databases
 
@@ -196,7 +209,8 @@ For example, employee table (employee id, first name, last name, employee pictur
 
 <br><br>
 
-#  OSI Model
+# Networking
+##  OSI Model
 1. Physical Layer
     - Radio, electric, or light is received and converted to digital bits
 
@@ -204,15 +218,28 @@ For example, employee table (employee id, first name, last name, employee pictur
 
 2. Data Link Layer
     - Bits => Frames
+    - MAC (Media Access Control) address
 
 <br>
 
 3. Network Layer
     - Frames => IP packet
-
+    - IP address. 
+        - MAC address is globally unique but can't route to the target without scanning the whole network
+    - ICMP (Internet Control Message Protocol)
+        - Examples
+            - Host unreachable
+            - Port unreachable
+            - Fragmentation needed
+            - Packet exired (infinite loop in routers)
+        - PING and traceroute use it
+        - Doesn't require listeners or ports to be opened
+        - Some firewalls block ICMP for security reasons, so PING won't awork
 <br>
 
 4. Transport Layer
+    - Ports
+        - With IP address and MAC address, message reaches a machine but don't know which application needs the message, so we need ports.
     - TCP: 
         - Ordered
         - Guaranteed delivery
@@ -241,6 +268,8 @@ For example, employee table (employee id, first name, last name, employee pictur
 
 7. Application Layer
     - Human-computer interaction layer, where applications can access te network services
+    - CDN:
+        CDNs need to cache the data retrieved from the backend server and to do that it needs to fully decrypt the content and understand it so it has to be a Layer 7 application
 
 <br>
 <br>
@@ -280,7 +309,7 @@ If the results doesn't impact a user response, think about using message queues.
 
 <br>
 
-# GraphQL VS REST API
+# GraphQL vs REST API vs gRPC
 
 ### GraphQL
 **Pros**
@@ -297,6 +326,11 @@ If the results doesn't impact a user response, think about using message queues.
 - Not caches by default by CDN because all post requests & URL is always the same => cache between data sources and Graphql
 - Can’t do File uploading. => It requires a different api for it.
 - Learning curve
+
+**When to use GraphQL**
+- Applications where nested data needs to be fetched in a single call. For example, a blog or social networking platform where posts need to be fetched along with nested comments and details about the person commenting.
+- Application retrieves data from multiple, different storage APIs
+- Apps for devices such as mobile phones, smartwatches, and IoT devices, where bandwidth usage matters.
 
 <br>
 
@@ -316,6 +350,28 @@ If the results doesn't impact a user response, think about using message queues.
 - If you have to retrieve any data from two endpoints, you need to send two separate requests to API.
 - Manipulating nested resources is not possible
 
+<br>
+
+### gRPC
+**Pros**
+- gRPC is roughly 7 times faster than REST when receiving data & roughly 10 times faster than REST when sending data for this specific payload. This is mainly due to the tight packing of the Protocol Buffers and the use of HTTP/2 by gRPC
+- In-Born Code Generation
+    - Native code generation support for a wide range of development languages
+- Built on HTTP 2 Instead of HTTP 1.1
+    - streaming
+    - faster transmission
+
+
+**Cons**
+- Slower Implementation Than REST
+- Not widely popular, less info, less 3rd party tools
+- Low browser compatibility
+
+**When to use gRPC?**
+- internal communication rather than browser or third party communication
+- lightweight microservices where the efficiency of message transmission is paramount.
+- Multi-language systems
+- Real-time streaming
 <br><br>
 
 # Backend Security
